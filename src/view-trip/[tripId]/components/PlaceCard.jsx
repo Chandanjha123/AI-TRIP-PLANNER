@@ -4,7 +4,7 @@ import { getPlacePhotoUrl } from '@/service/GooglePlaces';
 import useGoogleMapsScript from '@/service/useGoogleMapsScript';
 
 const PlaceCard = ({ place }) => {
-  const [photoUrl, setPhotoUrl] = useState('/tripimage.png');
+  const [photoUrl, setPhotoUrl] = useState('');
   const loaded = useGoogleMapsScript(); // wait for script
 
   useEffect(() => {
@@ -36,11 +36,15 @@ const PlaceCard = ({ place }) => {
       target='_blank'
     >
       <div className='border rounded-xl p-3 mt-2 flex gap-5 hover:scale-105 transition-all hover:shadow-md cursor-pointer'>
-        <img
-          src={photoUrl}
-          alt={place.placeName || "Place image"}
-          className='w-[150px] h-[150px] object-cover rounded-xl'
-        />
+        {photoUrl ? (
+          <img
+            src={photoUrl}
+            alt={place.placeName || "Place image"}
+            className='w-[150px] h-[150px] object-cover rounded-xl'
+          />
+        ) : (
+          <div className='w-[150px] h-[150px] bg-slate-200 animate-pulse rounded-xl'></div>
+        )}
 
         <div>
           <h2 className='font-bold text-lg'>{place?.placeName}</h2>

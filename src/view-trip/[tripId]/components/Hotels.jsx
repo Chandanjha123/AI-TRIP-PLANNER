@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useGoogleMapsScript from '../../../service/useGoogleMapsScript';
 import { getPlacePhotoUrl } from '@/service/GooglePlaces';
+import Skeleton from '@/my-trips/components/Skeleton';
 
 const Hotels = ({ trip }) => {
   const loaded = useGoogleMapsScript();
@@ -16,7 +17,7 @@ const Hotels = ({ trip }) => {
             hotel.hotelName + ' ' + hotel.hotelAddress,
             400
           );
-          images[hotel.hotelName] = url || '/tripimage.png';
+          images[hotel.hotelName] = url;
         }
         setHotelImages(images);
       }
@@ -42,11 +43,15 @@ const Hotels = ({ trip }) => {
             target='_blank'
           >
             <div className='hover:scale-105 transition-all cursor-pointer'>
-              <img
-                src={hotelImages[hotel.hotelName] || '/tripimage.png'}
-                alt={hotel.hotelName}
-                className='rounded-xl h-40 w-full object-cover'
-              />
+              {hotelImages[hotel.hotelName] ? (
+                <img
+                  src={hotelImages[hotel.hotelName]}
+                  alt={hotel.hotelName}
+                  className='rounded-xl h-40 w-full object-cover'
+                />
+              ) : (
+                <Skeleton value={240} />
+              )}
               <div className='my-2 flex flex-col gap-3'>
                 <h2 className='font-medium'>{hotel.hotelName}</h2>
                 <h2 className='text-xs text-gray-500'>

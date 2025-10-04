@@ -3,6 +3,7 @@ import { Button } from '../../../components/ui/button';
 import { FaShareNodes } from "react-icons/fa6";
 import { getPlacePhotoUrl } from '../../../service/GooglePlaces';
 import useGoogleMapsScript from '../../../service/useGoogleMapsScript';
+import { toast } from 'sonner';
 
 const InfoSection = ({ trip }) => {
   const [photoUrl, setPhotoUrl] = useState('/tripimage.png');
@@ -17,6 +18,21 @@ const InfoSection = ({ trip }) => {
     };
     fetchPhoto();
   }, [loaded, trip]);
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href); // copy URL
+      setCopied(true);
+      toast("Copied!")
+
+      // reset copied state after 2s
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  }
 
   return (
     <div>
@@ -47,7 +63,7 @@ const InfoSection = ({ trip }) => {
           </div>
         </div>
 
-        <Button>
+        <Button onClick={handleCopy} className='cursor-pointer'>
           <FaShareNodes />
         </Button>
       </div>
